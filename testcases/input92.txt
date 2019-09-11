@@ -1,0 +1,1 @@
+fk|./helloworld|./printarg_cin | kkk

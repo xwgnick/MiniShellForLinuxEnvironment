@@ -1,0 +1,3 @@
+/home/wx50/ece551/mp_miniproject/printarguments jk k 2>/home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k2> /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k2>/home/wx50/ece551/mp_miniproject/1.txt

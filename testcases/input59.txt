@@ -1,0 +1,4 @@
+set a hll
+echo $a
+inc a
+echo $a

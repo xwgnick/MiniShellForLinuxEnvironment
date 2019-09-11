@@ -1,0 +1,5 @@
+rm /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k > /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+cat /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+/home/wx50/ece551/mp_miniproject/helloworld > /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+cat /home/wx50/ece551/mp_miniproject/testprograms/1.txt

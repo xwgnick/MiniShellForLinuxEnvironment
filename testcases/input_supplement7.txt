@@ -1,0 +1,4 @@
+set a ./helloworld | ./printarg_cin
+export a
+env
+$a

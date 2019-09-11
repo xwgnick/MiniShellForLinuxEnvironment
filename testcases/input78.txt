@@ -1,0 +1,2 @@
+/home/wx50/ece551/mp_miniproject/helloworld > /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarg_cin < /home/wx50/ece551/mp_miniproject/1.txt

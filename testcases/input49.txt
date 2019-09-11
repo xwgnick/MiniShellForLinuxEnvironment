@@ -1,0 +1,4 @@
+set d 1
+set b 1
+set c 3
+echo $d$b$c+$c

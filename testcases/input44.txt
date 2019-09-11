@@ -1,0 +1,4 @@
+set a hello world
+set b $a
+echo $a
+echo $b

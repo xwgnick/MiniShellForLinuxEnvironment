@@ -1,0 +1,2 @@
+set a hello
+echo $a

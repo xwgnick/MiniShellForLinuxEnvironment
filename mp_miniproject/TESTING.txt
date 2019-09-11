@@ -1,0 +1,1434 @@
+A Few notations:
+Thank you for reading my TESTING.txt. Here are some notations I want to clear before your reading.
+1. When the command "ls" is involving, some of the print out in my file may be different to the result when you actually run my shell. This is because I deleted some trash files in /home/wx50/ece551/mp_miniproject before I grading my project. My program is working under the directory of 
+ /home/wx50/ece551/mp_miniproject. So, when you run "ls" now, the listing files will be fewer.
+2. All of these cases are experimented under valgrind. There is only one case may report memory lead. It is supplement case 1. This is because the child program failed to execute execve function, and exit immediately. According to Piazza, this situation is not something we need to handle.
+The valgrind will be clean when you exit my shell.
+3. I divded my testcases into two parts. They are the "normal part" and "supplement part". This is because I figured out some more test cases after I wrote some testcases before step by step. I do not want to ruin the logical structure of the normal part of the test cases, so I add them to the
+end of the file. So, please check both parts when you are reading my test cases.
+
+1.
+Run ./myshell < testcases/input01.txt
+You will see that it prints:
+myShell:/home/wx50/ece551/mp_miniproject $ 
+
+which is correct because input01.txt contains nothing. It should only print out the prompt I set, which is the full path of my working directory and other key words I expected.
+
+2.
+Run ./myshell < testcases/input02.txt
+You will see that it prints:
+myShell:/home/wx50/ece551/mp_miniproject $ 
+myShell:/home/wx50/ece551/mp_miniproject $ 
+
+which is correct because input02.txt contains only an enter, which will let myshell print the prompt again.
+
+3.
+Run ./myshell < testcases/input03.txt
+You will see that it prints:
+myShell:/home/wx50/ece551/mp_miniproject $ 
+myShell:/home/wx50/ece551/mp_miniproject $ 
+
+which is correct because input03.txt contains only a bunch of spaces like "     ", which will let myshell print the prompt again.
+
+4.
+Run ./myshell < testcases/input04.txt
+You will see that it prints:
+myShell:/home/wx50/ece551/mp_miniproject $ 
+
+which is correct because input04.txt contains "exit", which will let myshell exit imediately.
+
+5.
+Run ./myshell < testcases/input05.txt
+You will see that it prints:
+hello world
+Program exited with status 0
+
+which is correct because input05.txt contains "./helloworld" which is a program that will simply print out "hello world".
+
+6.
+Run ./myshell < testcases/input06.txt
+You will see that it prints:
+Program was killed by signal 11
+
+which is correct because input06.txt contains "./segfault", which is a segementation fault program.
+
+7. 
+Run ./myshell < testcases/input07.txt
+You will see that it prints:
+hello world
+Program exited with status 0
+
+which is correct because input07.txt contains "/home/wx50/ece551/mp_miniproject/helloworld" which is the full path of the program "./helloworld". It should print the same thing input5.txt did.
+
+8. 
+Run ./myshell < testcases/input08.txt
+You will see that it prints:
+Program was killed by signal 11
+
+which is correct because input08.txt contains "/home/wx50/ece551/mp_miniproject/segfault" which is the full path of the program "./segfalut". It should print the same thing input6.txt did.
+
+9. 
+Run ./myshell < testcases/input09.txt
+You will see that it prints:
+all the files and directories in this working directory
+Program exited with status 0
+
+which is correct because input9.txt contains "/bin/ls" which is the full path of the program "ls". It should list all the things in the working directory.
+
+10. 
+Run ./myshell < testcases/input10.txt
+You will see that it prints:
+all the files and directories in this working directory
+Program exited with status 0
+
+which is correct because input10.txt contains "ls". It should list all the things in the working directory.
+
+11.
+Run ./myshell < testcases/input11.txt
+You will see that it prints:
+all the content in commandShell.txt
+Program exited with status 0
+
+which is correct because input11.txt contains "cat commandShell.txt". It should list all the things in the "commandShell.txt".
+
+12.
+Run ./myshell < testcases/input12.txt
+You will see that it prints:
+Command jijl not found
+
+which is correct because input12.txt contains "jijl". It is a fault command which should not be found.
+
+13.
+Run ./myshell < testcases/input13.txt
+You will see that it prints:
+-bash: ./jkl: No such file or directory
+
+which is correct because input13.txt contains "./jkl". It is a fault command(or directory) which should not be found.
+
+14.
+Run ./myshell < testcases/input14.txt
+You will see that it prints:
+jk
+k
+k
+k
+kjk
+lk
+kjlk
+lklk
+k
+j
+kj
+Program exited with status 0
+
+which is correct because input14.txt contains "./printarguments jk k k k kjk lk kjlk lklk k j kj". "./printarg" is a program which can take arguments and print them in the ordered way.
+
+15.
+Run ./myshell < testcases/input15.txt
+You will see that it prints:
+a
+b
+23
+Program exited with status 0
+
+which is correct because input15.txt contains "./printarguments a                 b       23    ". My shell can delete all the unnecessaryspaces between arguments.
+
+16.
+Run ./myshell < testcases/input16.txt
+You will see that it prints:
+a
+bc
+c
+Program exited with status 0
+
+which is correct because input16.txt contains "./printarguments        a bc c    ". This case is to see if my shell can delete unnecessary spaces between the program and its first argument.
+
+17.
+Run ./myshell < testcases/input17.txt
+You will see that it prints:
+a b
+Program exited with status 0
+
+which is correct because input17.txt contains "./printarguments a\ b". The "\ " should be interpreted as a space which belongs to the arugument.
+
+18.
+Run ./myshell < testcases/input18.txt
+You will see that it prints:
+a b
+c d
+e f
+g h
+Program exited with status 0
+
+which is correct because input18.txt contains "./printarguments a\ b c\ d e\ f g\ h". This case is to see will more than one combinations of "\" and " " in the command line affect my shell. And my shell interpreted them in the correct way.
+
+19.
+Run ./myshell < testcases/input19.txt
+You will see that it prints:
+a b
+c      d
+Program exited with status 0
+
+which is correct because input19.txt contains "./printarguments a\ b   c\ \ \ \ \ \ d". This case is to see will more than one combinations of "\" and " " in one argument affect my shell. And my shell interpreted them in the correct way.
+
+20.
+Run ./myshell < testcases/input20.txt
+You will see that it prints:
+a    b   c   d
+1 2 3 4 5
+6 7 = 8
+Program exited with status 0
+
+which is correct because input20.txt contains "./printarguments a\ \ \ \ b\ \ \ c\ \ \ d 1\ 2\ 3\ 4\ 5 6\ 7\ =\ 8". This case is to see what will happen if more than one "\ " existing in more than one aruguments. These three arguments suppose to be "a    b   c   d","1 2 3 4 5", "6 7 = 8", and my shell gives the right answer.
+
+21.
+Run ./myshell < testcases/input21.txt
+You will see that it prints:
+a
+
+ d
+Program exited with status 0
+
+which is correct because input21.txt contains "./printarguments a\ \  \ \ \  \ d". This case is to see what will happen if "\ " being used as a sperated argument. These three arguments suppose to be "a  ","   "," d", and my shell gives the right answer.
+
+22.
+Run ./myshell < testcases/input22.txt
+You will see that it prints:
+ a
+b
+Program exited with status 0
+
+which is correct because input22.txt contains "./printarguments \ a b\ ". This case is to see what will happen if "\ " being placed at the front and end of the arguments. These two arguments suppose to be " a" and "b ", and my shell gives the right answer.
+
+23.
+Run ./myshell < testcases/input23.txt
+You will see that it prints:
+a\b
+Program exited with status 0
+
+which is correct because input23.txt contains "./printarguments a\b". This case is to see what will happen if "\" is not followed by " ". In my shell, if "\" is not followed by space, then it should be interpreted as a single symbol. So, my shell gives the right answer.
+
+24.
+Run ./myshell < testcases/input24.txt
+You will see that it prints:
+a\b c
+\7\8 =
+ 78
+Program exited with status 0
+
+which is correct because input24.txt contains "./printarguments a\b\ c \7\8\ = \ 78". This case is to see what will happen if "\"s are combined with "\ "s. These arguments should be interpreted as "a\b c","\7\8 ="," 78", and my shell gives the right answer.
+
+25.
+Run ./myshell < testcases/input25.txt
+You will see that it prints:
+\b
+d\
+Program exited with status 0
+
+which is correct because input25.txt contains "./printarguments \b d\". This case is to see what will happen if "\"s are placed at the front or end of the arguments. These two argumens should be interpreted as "\b" and "d\", and my shell gives the right answer.
+
+26.
+Run ./myshell < testcases/input26.txt
+You will see that it prints:
+a\b c
+\7\8 =
+ 78
+Program exited with status 0
+
+which is correct because input26.txt contains "/home/wx50/ece551/mp_miniproject/printarguments a\b\ c \7\8\ = \ 78". This case is to see what will happen if my shell take full path of a program which can take arguments, and nothing different happened, which means my shell gives the right answer.
+
+27.
+Run ./myshell < testcases/input27.txt
+You will see that it prints:
+myShell:/home/wx50/ece551
+
+which is correct because input27.txt contains "cd /home/wx50/ece551/". This should let my shell come to the directory of cd /home/wx50/ece551/, and my shell gives the right answer.
+
+28.
+Run ./myshell < testcases/input28.txt
+You will see that it prints:
+myShell:/home/wx50/ece551/mp_miniproject/testcases
+
+which is correct because input28.txt contains "cd myShell:/home/wx50/ece551/mp_miniproject/testcases". This should let my shell go into a deeper directory of working directory, and my shell gives the right answer.
+
+29.
+Run ./myshell < testcases/input29.txt
+You will see that it prints:
+ myShell:/ $
+
+which is correct because input29.txt contains "cd". This single cd command will make my shell's working directory back to the root directory, which is "/".
+
+30.
+Run ./myshell < testcases/input30.txt
+You will see that it prints:
+-bash: cd: kjlk: No such file or directory
+
+which is correct because input30.txt contains "cd kjlk". "kjik" is not a existing directory, and my shell prints out the right error message.
+
+31.
+Run ./myshell < testcases/input31.txt
+You will see that it prints:
+-bash: cd: /home/wx50/kjlk: No such file or directory
+
+which is correct because input31.txt contains "cd /home/wx50/kjlk". This case is to see what will happen if an existing directory followed by a non-existing directory, and my shell gives the right error message.
+
+32.
+Run ./myshell < testcases/input32.txt
+You will see that it prints:
+-bash: cd: ./8888jlkl: No such file or directory
+
+which is correct because input32.txt contains "cd ./8888jlkl". This case is to see what will happen if a non-existing directory be written in a fomal-looking format, and my shell gives the write error message.
+
+33.
+Run ./myshell < testcases/input33.txt
+You will see that it prints:
+-bash: cd: too many arguments
+
+which is correct because input33.txt contains "cd ../ mini_project". This case is to see what will happen if "cd" command take more than one argument, and my shell prints a proper error message.
+
+34.
+Run ./myshell < testcases/input34.txt
+You will see that it prints:
+hello
+Program exited with status 0
+
+which is correct because input34.txt contains:
+set a hello
+echo $a
+This case is to see what will happen if my shell can set a value in a standard format which should be "set" + " " + variable name + " " + variable value. This means viriable "a" should be set to "hello", and when I echoed it, it prints out the right answer, which means my shell is working well.
+
+35.
+Run ./myshell < testcases/input35.txt
+You will see that it prints:
+hello world+ij-789/*/*e54/4+54/5+ 8*
+Program exited with status 0
+
+which is correct because input35.txt contains:
+set a hello world+ij-789/*/*e54/4+54/5+    8*
+echo $a
+This case is to see what will happen if my shell can set a variable with a value of diffrent kinds of character types, like space, : ,+ and so on. According to README, this should work, and my shell also gives the right answer. In this case, it successfully set variable "a" to value "hello world+ij-789/*/*e54/4+54/5+ 8*".
+
+36.
+Run ./myshell < testcases/input36.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=     jijl
+Program exited with status 0
+
+which is correct because input36.txt contains:
+set a      jijl
+export a
+env
+This case is to see what will happen if my shell set a variable with multiple spaces infront of it. As we required, this value should contain all the spaces, which means "a" should be "    jijl". My shell gives the right answer.
+
+37.
+Run ./myshell < testcases/input37.txt
+You will see that it prints:
+Command set not found
+
+which is correct because input37.txt contains:
+set   a hello world
+echo $a
+This case is to see what will happen if user do not use the standard format for "set". In my shell, I require user should use strict "set" + " " + variable name + " " + value to set a new variable. The variable name should only contains  letters (case sensitive), underscores, and numbers. Any other format will lead to cannot find the command "set". My shell gives a proper erro message.
+
+38.
+Run ./myshell < testcases/input38.txt
+You will see that it prints:
+Command set not found
+
+which is correct because input38.txt contains:
+   set a hello world
+echo $a
+This case is to see what will happen if user do not use the standard format for "set". In my shell, I require user should use strict "set" + " " + variable name + " " + value to set a new variable. The variable name should only contains  letters (case sensitive), underscores, and numbers. Any other format will lead to cannot find the command "set". My shell gives a proper erro message.
+
+39.
+Run ./myshell < testcases/input39.txt
+You will see that it prints:
+3721
+Program exited with status 0
+4721
+Program exited with status 0
+
+which is correct because input39.txt contains:
+set a_b 3721
+set A_B 4721
+echo $a_b
+echo $A_B
+This case is to see what will happen if user uses variable names with same letters but one in capital situation and one is not. We are required to tell the difference between them, and my shell can interpreted them as different variables
+
+40.
+Run ./myshell < testcases/input40.txt
+You will see that it prints:
+the fisrt variable
+Program exited with status 0
+the secon variable
+Program exited with status 0
+
+which is correct because input40.txt contains:
+set a_b_3721 the fisrt variable
+set A_B_4721 the secon variable
+echo $a_b_3721
+echo $A_B_4721
+This case is to see whether the user can set the variable name is the standard way, including letters, numbers and underscores. My shell can do the right thing.
+
+41.
+Run ./myshell < testcases/input41.txt
+You will see that it prints:
+Command set not found
+
+which is correct because input41.txt contains:
+set (a) hello world
+echo $a
+This case is to see what will happen if the user use illegal characters in the variable names like "()", then my shell will inform the user that it cannot find the command "set", and the user will know the change the format of his input. It is a proper error message.
+
+42.
+Run ./myshell < testcases/input42.txt
+You will see that it prints:
+cannot have $ in the variable name
+
+which is correct because input42.txt contains:
+set $a hello
+echo $a
+This case is to see what will happen if the user use a special illegal character "$", then my shell will specially inform the user that "$" cannot be put in the variable name, and the user will know the change the format of his input. It is a proper error message.
+
+43.
+Run ./myshell < testcases/input43.txt
+You will see that it prints:
+7
+Program exited with status 0
+
+which is correct because input43.txt contains:
+set a 1
+set a 2
+set a 7
+echo $a
+This case is to see what will happen if the user set a same variable several times, it should be updated to the newest value. In this case, "a" is set to 1,2,7. It finally should be 7, and my shell dose the right thins
+
+44.
+Run ./myshell < testcases/input44.txt
+You will see that it prints:
+hello world
+Program exited with status 0
+hello world
+Program exited with status 0
+
+which is correct because input44.txt contains:
+set a hello world
+set b $a
+echo $a
+echo $b
+This case is to see what will happen if the user want to use $ to set a new variable which has the same value of an old variable. In this case, the user can set b using the same value a has by using "$a". So, both a and b's value will be set to "hello world". By "ehco", we can see my shell does the right thing.
+
+45.
+Run ./myshell < testcases/input45.txt
+You will see that it prints:
+hello
+Program exited with status 0
+hello world
+Program exited with status 0
+
+which is correct because input45.txt contains:
+set a hello
+set b $a world
+echo $a
+echo $b
+This case is to see what will happen if the user want to use $ to set a new variable which has the same value of an old variable, and also want to attach something new to it. In this case, the user can set b using the same value a has by using "$a". The user can also attach " world" to the variable b, which makes "b" has the value "hello world". By "ehco", we can see my shell does the right thing.
+
+46.
+Run ./myshell < testcases/input46.txt
+You will see that it prints:
+
+Program exited with status 0
+
+which is correct because input46.txt contains:
+echo $a
+This case is to see what will happen if the user want to use some variables that do not exist. In my shell, if the user forget to set a variable, and want to use "$" to represent some variable that has not been set yet, he/she will get a empty string "". So, the echo will only print out a empty line. 
+
+47.
+Run ./myshell < testcases/input47.txt
+You will see that it prints:
+
+Program exited with status 0
+
+which is correct because input47.txt contains:
+set a hello
+echo $anc
+This case is to see what will happen if the user want to use some variables that has part of a setted variable. According to PIAZZA, "$" should search all the characters until it meets illegal characters. So, echo should print out the variable "anc"'s value which is not existing.Therefore, it will print out an empty line.
+
+48.
+Run ./myshell < testcases/input48.txt
+You will see that it prints:
+is not d or b or c
+Program exited with status 0
+
+which is correct because input48.txt contains:
+set d 1
+set b 1
+set c 3
+set dbc is not d or b or c
+echo $dbc
+This case is to see what will happen if the user want to use some variables that has part of a setted variable. According to PIAZZA, "$" should search all the characters until it meets illegal characters. So, echo should print out the variable "dbc"'s value " is not d or b or c", and my shell gives the right answer.
+
+49.
+Run ./myshell < testcases/input49.txt
+You will see that it prints:
+113+3
+Program exited with status 0
+
+which is correct because input49.txt contains:
+set d 1
+set b 1
+set c 3
+echo $d$b$c+$c
+This case is to see what will happen if the user want to combine the value of "d","b","c" together by using "$", so "$d$b$c" will be interpreted as "113". "+" also will be appened. So echo will print 113+3, which means my shell gives the right answer.
+
+50.
+Run ./myshell < testcases/input50.txt
+You will see that it prints:
+15: is 15
+Program exited with status 0
+
+which is correct because input50.txt contains:
+set a 15
+echo $a: is 15
+This case is to see what will happen if the user want to combine the value of "a" will some other characters. In this case, it is followed by ": is 15". My shell gives the right answer.
+
+51.
+Run ./myshell < testcases/input51.txt
+You will see that it prints:
+1
+Program exited with status 0
+1
+Program exited with status 0
+
+which is correct because input51.txt contains:
+set a 1
+echo $$a
+echo $$$a
+This case is to see what will happen if two more "$"s stick with each other. In this case, my shell will interpreted multiple "$" as one, and get its value.
+
+52.
+Run ./myshell < testcases/input52.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=1
+Program exited with status 0
+
+which is correct because input52.txt contains:
+set a 1
+export a
+env
+This case is to see whether the "export" command can work properly. After setting a and export a into the environment, by "env", my shell can see that "a" has been successfully put into environement.
+ 
+53.
+Run ./myshell < testcases/input53.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=1
+b=2
+c=3
+Program exited with status 0
+
+which is correct because input53.txt contains:
+set a 1
+set b 2
+set c 3
+export a b c
+env
+In my shell, export can take more than one arguments and export them into the environment. From this case, after setting a, b and c, the shell can export all three of them into the environment. Using "env" can see all of that.
+
+54.
+Run ./myshell < testcases/input54.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=33
+Program exited with status 0
+
+which is correct because input54.txt contains:
+set a 33
+export   a   b    c
+env
+This is to see what will happen if the user types random numbers of spaces between arguments of export. My shell can ignore the spaces and export them normally.
+
+55.
+Run ./myshell < testcases/input55.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+Program exited with status 0
+
+which is correct because input55.txt contains:
+export b
+env
+This is to see what will happen if the user want to export some non-existing variables. My shell will not export anything to the environment if the variable is not setted yet.
+
+56.
+Run ./myshell < testcases/input56.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=1
+Program exited with status 0
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=1
+Program exited with status 0
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=2
+Program exited with status 0
+
+which is correct because input56.txt contains:
+set a 1
+export a
+env
+set a 2
+env
+export a
+env
+This is to see what will happen if the user want to set a variable, and then export it, and then reset its value. This will not change its value in the environment. After re-export, the variable will be set into new value in the environment. In this case, a will be change to 2.
+
+57.
+Run ./myshell < testcases/input57.txt
+You will see that it prints:
+too few aruguments for export
+Command export not found
+
+which is correct because input57.txt contains:
+export
+This is to see what will happen if the user only type one command "export". And my shell gives a proper error message.
+
+58.
+Run ./myshell < testcases/input58.txt
+You will see that it prints:
+1
+Program exited with status 0
+2
+Program exited with status 0
+
+which is correct because input58.txt contains:
+set a 1
+echo $a
+inc a
+echo $a
+This is to check the standard behaviour of inc. After setting a to be 1, with inc, it will become 2. My shell gives the right answer.
+
+59.
+Run ./myshell < testcases/input59.txt
+You will see that it prints:
+ hll
+Program exited with status 0
+1
+Program exited with status 0
+
+which is correct because input59.txt contains:
+set a hll
+echo $a
+inc a
+echo $a
+This is also to check the standard behaviour of inc. After setting a to be hll, with inc, it will become 1. Because a do not have a numeric value, it should be set to 0 and inc one time to be 1. My shell gives the right answer.
+
+60.
+Run ./myshell < testcases/input60.txt
+You will see that it prints:
+1
+Program exited with status 0
+2
+Program exited with status 0
+3
+Program exited with status 0
+4
+Program exited with status 0
+5
+Program exited with status 0
+
+which is correct because input60.txt contains:
+set a 1
+echo $a
+inc a
+echo $a
+inc a
+echo $a
+inc a
+echo $a
+inc a
+echo $a
+This is to check if inc can be used multiple time. After setting to 1, a can be gradually inc to 5. My shell gives the right answer.
+
+61.
+Run ./myshell < testcases/input61.txt
+You will see that it prints:
+cannot have $ in the variable name
+
+which is correct because input61.txt contains:
+inc $a
+This is to see what will happen if the user put "$" characters into the variable name, my shell gives a proper error message.
+
+62.
+Run ./myshell < testcases/input62.txt
+You will see that it prints:
+1
+Program exited with status 0
+
+which is correct because input62.txt contains:
+inc a
+echo $a
+This is to see what will happen if the user incs some non-existing variables. If they do so, my shell can set this variable to be "1", which satisfies the requirement.
+
+63.
+Run ./myshell < testcases/input63.txt
+You will see that it prints:
+Command inc not found
+
+which is correct because input63.txt contains:
+inc :a
+This is to see what will happen if the user incs some variables which are not in the standard format. My shell gives a proper error message.
+
+64.
+Run ./myshell < testcases/input64.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+
+which is correct because input64.txt contains:
+export :a
+env
+This is to see what will happen if the user exports some variables which are not in standard format. My shell will not export these kind of variables into the enviroment, because they are not and cannot be set, which is reasonable.
+
+65.
+Run ./myshell < testcases/input65.txt
+You will see that it prints:
+ ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=3
+Program exited with status 0
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=3
+Program exited with status 0
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=4
+Program exited with status 0
+
+which is correct because input65.txt contains:
+set a 3
+export a
+env
+inc a
+env
+export a
+env
+This is to see what will happen if the user used inc to change some variables and how to export them into the environment. In my shell, after inc, the variable's value will +1. If the user wants to use this variable in the environemnt, they should export it. If they want to inc its value in environment, they should inc it, and then export it agian.
+
+66.
+Run ./myshell < testcases/input66.txt
+You will see that it prints:
+Command inc not found
+
+which is correct because input66.txt contains:
+inc
+This is to see what will happen if the user types only one "inc" command. Because there are not enough arguments, my shell will report cannot find the command of inc, which is reasonable.
+
+67.
+Run ./myshell < testcases/input67.txt
+You will see that it prints:
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+Program exited with status 0
+
+which is correct because input67.txt contains:
+echo $ECE551PATH
+This is to see what will happen if the user directly echo ECE551PATH when they just come into my shell. ECE551PATH should be a default variable that already exists. My shell gives the right answer.
+
+68.
+Run ./myshell < testcases/input68.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+Program exited with status 0
+
+which is correct because input68.txt contains:
+env
+This is to see what will happen if the user directly env when they just come into my shell. ECE551PATH should be a default environment that already exits. My shell gives the right answer.
+
+69.
+Run ./myshell < testcases/input69.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/wx50/ece551/mp_miniproject
+Program exited with status 0
+hello world
+Program exited with status 0
+
+which is correct because input69.txt contains:
+set ECE551PATH $ECE551PATH:/home/wx50/ece551/mp_miniproject
+export ECE551PATH
+env
+helloworld
+This is to see what will happen if the user changes the path of ECE551PATH. In this case, the user adds "/home/wx50/ece551/mp_miniproject" into ECE551PATH, and then when he directlry run "helloworld"(without "./"), this program is executed successfully. This case proved that user can change the path in ECE551PATH, and then directly run some programs as they wish without "/".
+
+70.
+Run ./myshell < testcases/input70.txt
+You will see that it prints:
+hello world
+Program exited with status 0
+
+which is correct because input70.txt contains:
+/home/wx50/ece551/mp_miniproject/helloworld > 1.txt
+cat 1.txt
+This is to see whether my shell can redirect standard out put to another file. In this case, my shell redirect the standard output of "helloworld" to the file "1.txt". It gives the right action.
+
+71.
+Run ./myshell < testcases/input71.txt
+You will see that it prints:
+Program exited with status 0
+Program exited with status 0
+jk
+k
+Program exited with status 0
+
+which is correct because input71.txt contains:
+rm /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k > /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+cat /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+This is to see whether my shell can redirect standard out put to another file. In this case, my shell redirect the standard output of "helloworld" to the file "1.txt" which is not existing. It should create a new file of this name, and put information into this file. My shell gives the right answer.
+
+72.
+Run ./myshell < testcases/input72.txt
+You will see that it prints:
+Program exited with status 0
+Program exited with status 0
+jk
+k
+Program exited with status 0
+Program exited with status 0
+hello world
+Program exited with status 0
+
+which is correct because input72.txt contains:
+rm /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k > /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+cat /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+/home/wx50/ece551/mp_miniproject/helloworld > /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+cat /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+This is to see what will happen if the users redirects multiples times into one same file. It should overwrite the content in this file, which means this file should only contain the newest information being redirected in. In this case, it should only contain the standard out put form "helloworld". My shell gives the right answer.
+
+73.
+Run ./myshell < testcases/input73.txt
+You will see that it prints:
+Program exited with status 0
+Program exited with status 0
+jk
+k
+Program exited with status 0
+cat: /home/wx50/ece551/mp_miniproject/testprograms/2.txt: No such file or directory
+Program exited with status 1
+cat: /home/wx50/ece551/mp_miniproject/testprograms/3.txt: No such file or directory
+Program exited with status 1
+Program exited with status 0
+rm: cannot remove '/home/wx50/ece551/mp_miniproject/testprograms/2.txt': No such file or directory
+Program exited with status 1
+rm: cannot remove '/home/wx50/ece551/mp_miniproject/testprograms/3.txt': No such file or directory
+Program exited with status 1
+
+which is correct because input73.txt contains:
+rm /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k > /home/wx50/ece551/mp_miniproject/testprograms/1.txt > /home/wx50/ece551/mp_mi\
+niproject/testprograms/2.txt > /home/wx50/ece551/mp_miniproject/testprograms/3.txt
+cat /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+cat /home/wx50/ece551/mp_miniproject/testprograms/2.txt
+cat /home/wx50/ece551/mp_miniproject/testprograms/3.txt
+rm /home/wx50/ece551/mp_miniproject/testprograms/1.txt
+rm /home/wx50/ece551/mp_miniproject/testprograms/2.txt
+rm /home/wx50/ece551/mp_miniproject/testprograms/3.txt
+This is to see what will happen if the users redirects to multiple files. In my shell, redirection will only considerate the first file. So 1.txt will be created and overwitten. 2.txt and 3.txt will not even be created. So when "catting" all of them, only 1.txt has valid information. Because 2.txt and 3.txt not exist, so "cat" and "rm" fails on both of them. My shell gives the right answer.
+
+74.
+Run ./myshell < testcases/input74.txt
+You will see that it prints:
+please use standard filename for redirection
+
+which is correct because input74.txt contains:
+/home/wx50/ece551/mp_miniproject/printarguments jk k >
+This is to see what will happen if the users put ">" at the end of command with no file attach to it. My shell reports a proper error message.
+
+75.
+Run ./myshell < testcases/input75.txt
+please use standard format for redirection command
+please use standard filename for redirection
+
+which is correct because input75.txt contains:
+ > /home/wx50/ece551/mp_miniproject/printarguments jk k
+This is to see what will happen if the users put ">" at the front of command with no file attach to it. My shell reports a proper error message.
+
+76.
+Run ./myshell < testcases/input76.txt
+please use standard filename for redirection
+
+which is correct because input76.txt contains:
+ /home/wx50/ece551/mp_miniproject/printarguments jk k > > /home/wx50/ece551/mp_miniproject/1.txt
+This is to see what will happen if the users put two ">"s together with no files betweent them. My shell prints out a proper message.
+ 
+77.
+Run ./myshell < testcases/input77.txt
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+
+which is correct because input77.txt contains:
+ /home/wx50/ece551/mp_miniproject/printarguments jk k >/home/w50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k> /home/w50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k>/home/w50/ece551/mp_miniproject/1.txt
+This is to see what will happen if the user uses wrong format of redirection. In my shell, user should use strict "program" +" " + ">or<or2>" + " " + "filename" format as command. Anything which is against this way will be interpreted as error. My shell will give proper error message.
+
+78.
+Run ./myshell < testcases/input78.txt
+Program exited with status 0
+hello
+Program exited with status 0
+
+which is correct because input78.txt contains:
+/home/wx50/ece551/mp_miniproject/helloworld > /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarg_cin < /home/wx50/ece551/mp_miniproject/1.txt
+This is to see the normal using of "<". In this case, the user uses the output of "helloworld" as the standard input of printarg_cin. My shell gives the right answer.
+
+79.
+Run ./myshell < testcases/input79.txt
+hello
+Program exited with status 0
+
+which is correct because input78.txt contains:
+/home/wx50/ece551/mp_miniproject/printarg_cin < /home/wx50/ece551/mp_miniproject/1.txt < /home/wx50/ece551/mp_miniproject/printarg_\
+cin < /home/wx50/ece551/mp_miniproject/2.txt
+This is to see the use of "<" with muliple files. In my shell, "<" will only consider the first filename and ignore all the others. So in this case, it gets the information from 1.txt and prints that out successfully. 
+
+80.
+Run ./myshell < testcases/input80.txt
+cannot open 7.txt
+Program exited with status 1
+
+which is correct because input80.txt contains:
+/home/wx50/ece551/mp_miniproject/printarg_cin < 7.txt
+This is to see what will happen if the user tries to redirect a non-existing file into the program. My shell will report a proper error message, and exit properly.
+
+81.
+Run ./myshell < testcases/input81.txt
+please use standard filename for redirection
+
+which is correct because input81.txt contains:
+/home/wx50/ece551/mp_miniproject/printarg_cin < < 7.txt   
+This is to see what will happen if the user tries to combine two "<"s together with no file attached. My shell gives a proper error message.
+
+82.
+Run ./myshell < testcases/input82.txt
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+
+
+which is correct because input82.txt contains:
+/home/wx50/ece551/mp_miniproject/printarguments jk k >/home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k> /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k>/home/wx50/ece551/mp_miniproject/1.txt
+This is to see what will happen if the user uses wrong format of redirection. In my shell, user should use strict "program" +" " + ">or<or2>" + " " + "filename" format as command. Anything which is against this way will be interpreted as error. My shell will give proper error message.
+
+83.
+Run ./myshell < testcases/input83.txt
+Program was killed by signal 6
+*** stack smashing detected ***: <unknown> terminated
+Program exited with status 0
+
+which is correct because input83.txt contains:
+/home/wx50/ece551/mp_miniproject/printerr 2> /home/wx50/ece551/mp_miniproject/1.txt
+cat /home/wx50/ece551/mp_miniproject/1.txt
+This is to see whether "2>" can work sucessfully. In this case, the protram "printerr" is set to be aborted, and its error message is printed into 1.txt. My shell gives the expected action.
+
+84.
+Run ./myshell < testcases/input84.txt
+Program exited with status 0
+hello world
+Program exited with status 0
+Program was killed by signal 6
+*** stack smashing detected ***: <unknown> terminated
+Program exited with status 0
+
+which is correct because input84.txt contains:
+/home/wx50/ece551/mp_miniproject/helloworld > /home/wx50/ece551/mp_miniproject/1.txt
+cat /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printerr 2> /home/wx50/ece551/mp_miniproject/1.txt
+cat /home/wx50/ece551/mp_miniproject/1.txt
+This is to see whether "2>" can overwrite an existing file. In this case, 1.txt has been written to "hello world", and then was overwritten by "printerr". My shell gives the expected action.
+
+85.
+Run ./myshell < testcases/input85.txt
+Program was killed by signal 6
+ *** stack smashing detected ***: <unknown> terminated
+Program exited with status 0
+cat: /home/wx50/ece551/mp_miniproject/2.txt: No such file or directory
+Program exited with status 0
+rm: cannot remove '/home/wx50/ece551/mp_miniproject/2.txt': No such file or directory
+Program exited with status 1
+
+which is correct because input85.txt contains:
+/home/wx50/ece551/mp_miniproject/printerr 2> /home/wx50/ece551/mp_miniproject/1.txt 2> /home/wx50/ece551/mp_miniproject/2.txt
+cat /home/wx50/ece551/mp_miniproject/1.txt
+cat /home/wx50/ece551/mp_miniproject/2.txt
+rm /home/wx50/ece551/mp_miniproject/1.txt
+rm /home/wx50/ece551/mp_miniproject/2.txt
+This is to see what will happen if the user use "2>" on multiple files. As ">", "2>" will only consider the first file. It will creat it and overwrite it. The last file will not even be created. That's why it cannot be "cat"ed or "rm"ed. My shell gives the expected action.
+
+86.
+Run ./myshell < testcases/input86.txt
+please use standard filename for redirection
+
+which is correct because input86.txt contains:
+/home/wx50/ece551/mp_miniproject/printerr 2> 2> /home/wx50/ece551/mp_miniproject/1.txt
+This is to see what will happen if the user use two "2>" together. This is not permitted, and my shell prints out a proper error message.
+
+87.
+Run ./myshell < testcases/input87.txt
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+
+which is correct because input87.txt contains:
+/home/wx50/ece551/mp_miniproject/printarguments jk k 2>/home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k2> /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k2>/home/wx50/ece551/mp_miniproject/1.txt
+This is to see what will happen if the user uses wrong format of redirection. In my shell, user should use strict "program" +" " + ">or<or2>" + " " + "filename" format as command. Anything which is against this way will be interpreted as error. My shell will give proper error message.
+
+88.
+Run ./myshell < testcases/input88.txt
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+please use standard format for redirection command
+please use standard filename for redirection
+
+
+which is correct because input88.txt contains:
+/home/wx50/ece551/mp_miniproject/printarguments jk k > 2> /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k <2> /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k 2>>/home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k >< /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k <> /home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k <</home/wx50/ece551/mp_miniproject/1.txt
+/home/wx50/ece551/mp_miniproject/printarguments jk k >> /home/wx50/ece551/mp_miniproject/1.txt
+This is to see what will happen if the user uses wrongly combines ">","<","2>" to gether. My shell gives proper error messages.
+
+89.
+Run ./myshell < testcases/input89.txt
+Program exited with status 0
+#input63.txt#
+#input77.txt#
+input1.txt
+input10.txt
+input11.txt
+input12.txt
+input13.txt
+input14.txt
+input15.txt
+input16.txt
+input17.txt
+input18.txt
+input19.txt
+input2.txt
+input20.txt
+input21.txt
+input22.txt
+input23.txt
+input24.txt
+input25.txt
+input26.txt
+input27.txt
+input28.txt
+input29.txt
+input3.txt
+input30.txt
+input31.txt
+input32.txt
+input33.txt
+input34.txt
+input35.txt
+input36.txt
+input37.txt
+input38.txt
+input39.txt
+input4.txt
+input40.txt
+input41.txt
+input42.txt
+input43.txt
+input44.txt
+input45.txt
+input46.txt
+input47.txt
+input48.txt
+input49.txt
+input5.txt
+input50.txt
+input51.txt
+input52.txt
+input53.txt
+input54.txt
+input54.txt~
+input55.txt
+input56.txt
+input57.txt
+input57.txt~
+input58.txt
+input58.txt~
+input59.txt
+input6.txt
+input60.txt
+input60.txt~
+input61.txt
+input62.txt
+input62.txt~
+input63.txt
+input63.txt~
+input64.txt
+input64.txt~
+input65.txt
+input66.txt
+input66.txt~
+input67.txt
+input68.txt
+input69.txt
+input7.txt
+input70.txt
+input70.txt~
+input71.txt
+input71.txt~
+input72.txt
+input72.txt~
+input73.txt
+input73.txt~
+input74.txt
+input75.txt
+input76.txt
+input77.txt
+input78.txt
+input78.txt~
+input79.txt
+input79.txt~
+input8.txt
+input80.txt
+input80.txt~
+input81.txt
+input82.txt
+input82.txt~
+input83.txt
+input83.txt~
+input84.txt
+input85.txt
+input86.txt
+input86.txt~
+input87.txt
+input87.txt~
+input88.txt
+input89.txt
+input9.txt
+input_supplement1.txt
+input_supplement2.txt
+input_supplement3.txt
+Program exited with status 0
+
+
+
+which is correct because input89.txt contains:
+ls | cat
+This is to see whether my shell can execute pipe properly. In this case, the standard output of ls is used as the standard input of cat. My shell gives the expected action.
+
+90.
+Run ./myshell < testcases/input90.txt
+Program exited with status 0
+Program exited with status 0
+Program exited with status 0
+#commandShell.txt#
+#experiment.c#
+#new.txt#
+#shell#
+#shell.cpp#
+#test1.txt#
+1.txt
+<
+>
+README
+abort
+abort.cpp
+beifen
+beifen.cpp
+beifen.cpp~
+beifen2
+beifen2.cpp
+beifen2.cpp~
+beifen3
+beifen3.cpp
+beifen3.cpp~
+beifen3.h
+beifen4
+beifen4.cpp
+beifen4.cpp~
+beifen4.h
+benfen
+benfen.cpp~
+commandShell.txt
+correct_redirection1.txt
+experiment
+experiment.cpp
+experiment1
+experiment1.cpp
+experiment1.cpp~
+head_functions.h
+head_functions.h~
+helloworld
+input26.txt
+input33.txt
+input48.txt
+input49.txt
+input50.txt
+input89.txt
+jklkj
+jlkjl
+main_functions.h
+main_functions.h~
+myshell
+myshell-ggdb3
+myshell.cpp
+myshell_back
+myshell_back.cpp
+numerics.txt
+output
+output.txt
+printarg.cpp
+printarg_cin
+printarg_cin.cpp
+printarg_cin.cpp~
+printarguments
+printerr
+result.txt
+result1.txt
+result1_1.txt
+result1_1_1.txt
+result2.txt
+result2_2.txt
+result2_2_2.txt
+result3.txt
+result3_3.txt
+result3_3_3.txt
+segfault
+shell
+shell.cpp~
+shell.h
+shell_v1.cpp
+shellvar.h
+shellvar.h~
+test.cpp
+test1.cpp
+test1.cpp~
+test1.txt
+test2.cpp
+test2.txt
+test2.txt~
+test_deadlock.txt
+test_deadlock.txt~
+test_redirection.txt~
+test_redirection1.txt
+test_redirection2.txt
+testcases
+testprograms
+Program exited with status 0
+
+which is correct because input90.txt contains:
+ls | cat | cat | cat
+This is to see whether my shell can execute multiple pipes properly. In this case, the standard output of ls is used as the standard input of all of the cats. My shell gives the expected action.
+
+91.
+Run ./myshell < testcases/input91.txt
+hello
+Program exited with status 0
+Program exited with status 0
+Program exited with status 0
+hello
+Program exited with status 0
+
+which is correct because input91.txt contains:
+cat 1.txt
+./printarg_cin < 1.txt | cat |cat > 3.txt
+cat 3.txt
+This is to see whether my shell can execute multiple pipes with redirections in it successfully. In this case, 1.txt is used as ./printarg_cin's input and its output is transffered to 3.txt. After printing it out, we can see my shell has expected action.
+
+92.
+Run ./myshell < testcases/input92.txt
+Command fk not found
+Command kkk not found
+hello
+Program exited with status 0
+Program exited with status 0
+
+which is correct because input92.txt contains:
+fk|./helloworld|./printarg_cin | kkk
+This is to see what will happen if the user mixed some existing command and some non-existing command. In this case, ./helloworld will pass its out put to ./printarg_cin which can print them out. Other two commands cannot be found. My shell gives the expected action.
+
+93.
+Run ./myshell < testcases/input93.txt
+invalid input in pipe
+
+which is correct because input93.txt contains:
+| ./helloworld
+This is to see what will happen if the user put the "|" at the beginning of the command. My shell gives a proper error message.
+
+94.
+Run ./myshell < testcases/input94.txt
+invalid input in pipe
+
+which is correct because input94.txt contains:
+./helloworld | | ./helloworld
+This is to see what will happen if the user put the two "|" together with nothing between them. My shell gives a proper error message.
+
+95.
+Run ./myshell < testcases/input95.txt
+you should put something behind |
+
+which is correct because input95.txt contains:
+.helloworld |
+This is to see what will happen if the user puts a "|" at the end of the command with nothing behind it. My shell gives a proper error message.
+
+96.
+Run ./myshell < testcases/input96.txt
+Program exited with status 0
+Program exited with status 0
+-rw-rw-r-- 1 wx50 wx50   5669 Nov 25 18:44 #shell.cpp#
+-rw-rw-r-- 1 wx50 wx50  12772 Dec  5 07:38 myshell.cpp
+-rw-rw-r-- 1 wx50 wx50  10171 Nov 26 23:48 myshell_back.cpp
+-rw-rw-r-- 1 wx50 wx50    387 Nov 16 23:17 shell.cpp~
+-rw-rw-r-- 1 wx50 wx50   5668 Nov 25 16:24 shell_v1.cpp
+Program exited with status 0
+
+which is correct because input96.txt contains:
+set a |
+ls -l $a grep shell $a grep .cpp
+This is to show that my shell can set a variable to "|", and use it as pipe.
+
+97.
+Run ./myshell < testcases/input97.txt
+you should put something behind |
+
+which is correct because input97.txt contains:
+"./hellowrold |     "
+This is to see what will happen if there are bunch of spaces behind the "|". My shell gives a proper error message.
+
+
+
+
+
+
+Supplement testcases:
+1.
+Run ./myshell < testcases/input_supplement1.txt
+You will see that it prints:
+Problematic program execution
+Program exited with status 1
+
+which is correct because input_supplement1.txt contains "/home/wx50/ece551/mp_miniproject/testcases". This case is to see what will happen if we input a filename in its fullpath in a program's format. my shell should print out it is a invalid execution of the program, and it gives the right answer. This command may cause some memory leak, but this command will cause the program exit with status 0. This means the program is failed, and under this circumstance, we are not required to make it clean when the program failed. After this command finished, if you run "exit", the memory leak will be eliminated, which satisfied the requirement in PIAZZA.
+
+2.
+Run ./myshell < ./testcases/input_supplement2.txt
+You will see that it prints:
+-bash: /home/wx50/ece551/mp_miniproject/fdfd: No such file or directory
+
+which is correct because input_supplement2.txt contains "/home/wx50/ece551/mp_miniproject/fdfd". This case is to see what will happen if we input an invalid program name in its fullpath. My shell should let the user know its invalid, and it gives the right answer.
+
+3.
+Run ./myshell < ./testcases/input_supplement3.txt
+You will see that it prints:
+ ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=1
+b=2
+Program exited with status 0
+
+which is correct because input_supplement3.txt contains 
+set a 1
+set b 2
+export a b == c d
+env
+This case is to see how my "export" handles mutiple arguments when there are some arguements are not in standard format or not exists. In my shell, export will ignore the arguments which are not set at all, which means in this case, it will only export "a" and "b" into the environment. My shell gives the right answer.
+
+4.
+Run ./myshell < ./testcases/input_supplement4.txt
+You will see that it prints:
+hello
+world
+Program exited with status 0
+
+which is correct because input_supplement4.txt contains 
+set a hello world
+./printarguments $a
+In this case, a will be interpreted as "hello world". When it is inputted into the ./printarguments' standard input, it will interpreted it as two arguments, which is the same as the bash we are using now.
+
+5.
+Run ./myshell < ./testcases/input_supplement5.txt
+You will see that it prints:
+hello world
+Program exited with status 0
+
+which is correct because input_supplement5.txt contains 
+set a hello\ world
+./printarguments $a
+In this case, a will be interpreted as "hello\ world". When it is inputted into the ./printarguments' standard input, it will interpreted it as two arguments, which is the same as the bash we are using now.
+
+6.
+Run ./myshell < ./testcases/input_supplement6.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+c=     1
+Program exited with status 0
+
+which is correct because input_supplement6.txt contains 
+set a
+set b 1
+set c $a$b
+export c
+env
+This case is to see whether a variable can be set to a bunch of spaces. In this case, a is set to "     ". After appending it with b to make c and then exporting it, we can see c contains a bunch of spaces before it. This is the expoected action.
+
+6.
+Run ./myshell < ./testcases/input_supplement6.txt
+You will see that it prints:
+ ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+c=1
+Program exited with status 0
+
+which is correct because input_supplement6.txt contains 
+set a
+set b 1
+set c $a$b
+export c
+env
+This case is to see whether a variable can be set to a empty string. The user uses "set a  "  in this case, which means a is set to be "". After appending it with b to make c and then exporting it, we can see "c" contains no spaces before it. This is the expected action.
+
+7.
+Run ./myshell < ./testcases/input_supplement7.txt
+You will see that it prints:
+ECE551PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+a=./helloworld | ./printarg_cin
+Program exited with status 0
+Program exited with status 0
+hello
+Program exited with status 0
+
+which is correct because input_supplement7.txt contains 
+set a ./helloworld | ./printarg_cin
+export a
+env
+$a
+This case is to see whether a variable can be set to a pipe command. In this case, first we can see a is set to "./helloworld | ./printarg_cin" successfully by exporting and env. And then, using "$a" can directly run the piple command and get the right answer.

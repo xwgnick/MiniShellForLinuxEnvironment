@@ -1,0 +1,7 @@
+set a 1
+export a
+env
+set a 2
+env
+export a
+env

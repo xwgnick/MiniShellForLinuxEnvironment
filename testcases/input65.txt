@@ -1,0 +1,7 @@
+set a 3
+export a
+env
+inc a
+env
+export a
+env

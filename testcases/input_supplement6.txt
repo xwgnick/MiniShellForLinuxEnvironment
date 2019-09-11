@@ -1,0 +1,5 @@
+set a      
+set b 1
+set c $a$b
+export c
+env

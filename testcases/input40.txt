@@ -1,0 +1,4 @@
+set a_b_3721 the fisrt variable
+set A_B_4721 the secon variable
+echo $a_b_3721
+echo $A_B_4721

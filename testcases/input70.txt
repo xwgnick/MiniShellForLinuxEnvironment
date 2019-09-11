@@ -1,0 +1,2 @@
+/home/wx50/ece551/mp_miniproject/helloworld > 1.txt
+cat 1.txt

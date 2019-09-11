@@ -1,0 +1,3 @@
+cat 1.txt
+./printarg_cin < 1.txt | cat | cat > 3.txt
+cat 3.txt

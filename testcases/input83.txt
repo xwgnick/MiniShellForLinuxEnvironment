@@ -1,0 +1,2 @@
+/home/wx50/ece551/mp_miniproject/printerr 2> /home/wx50/ece551/mp_miniproject/1.txt
+cat /home/wx50/ece551/mp_miniproject/1.txt

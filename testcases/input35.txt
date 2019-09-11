@@ -1,0 +1,2 @@
+set a hello world+ij-789/*/*e54/4+54/5+    8*
+echo $a

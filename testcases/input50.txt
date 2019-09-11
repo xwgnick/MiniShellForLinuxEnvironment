@@ -1,0 +1,2 @@
+set a 15
+echo $a: is 15

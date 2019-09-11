@@ -1,0 +1,4 @@
+set a 1
+set b 2
+export a b == c d
+env

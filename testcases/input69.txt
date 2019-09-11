@@ -1,0 +1,4 @@
+set ECE551PATH $ECE551PATH:/home/wx50/ece551/mp_miniproject
+export ECE551PATH
+env
+helloworld

@@ -1,0 +1,3 @@
+set a      jijl
+export a
+env

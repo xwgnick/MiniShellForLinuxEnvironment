@@ -1,0 +1,4 @@
+set a 1
+echo $a
+inc a
+echo $a

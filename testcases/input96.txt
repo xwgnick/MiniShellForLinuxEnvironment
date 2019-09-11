@@ -1,0 +1,2 @@
+set a |
+ls -l $a grep shell $a grep .cpp
